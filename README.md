@@ -52,8 +52,8 @@ $ make run <- runs a test container with default options
 $ make build run <- builds the container and runs it in a test mode
 
 "cleanrun" based
-I created this script to do a complete build after docker RM and docker image RM everything on your host.
-This made my life a bit easier with dependencies.
-WARNING:  running ./cleanrun WILL automatically stop all containers, rm all containers and delete all docker images on your host!!!!   
+I created this script to do a complete build after docker rm of all containers on your host.
+This made my life a bit easier with dependencies and cluttered up containers with various builds.
+WARNING:  running ./cleanrun WILL automatically stop all containers, rm all containers and will not give you an option to stop!!!!  
 
 
