@@ -48,7 +48,9 @@ simple clone the project to your local host and run the following:
 Makefile based:
 
 $ make build <- builds the container
+
 $ make run <- runs a test container with default options
+
 $ make build run <- builds the container and runs it in a test mode
 
 "cleanrun" based
