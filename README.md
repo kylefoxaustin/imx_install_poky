@@ -45,13 +45,15 @@ docker run -i -v /mypath/mydir:/root/poky <imx_install_poky>
 # How to build
 simple clone the project to your local host and run the following:
 
-Makefile based:
+akefile based.  Here are some simple build options you can use:
 
 $ make build <- builds the container
 
 $ make run <- runs a test container with default options
 
 $ make build run <- builds the container and runs it in a test mode
+
+$ make shell <-- after performing a make run, executing a make shell command will docker exec -it bash to the running container
 
 "cleanrun" based
 I created this script to do a complete build after docker rm of all containers on your host.
