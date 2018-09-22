@@ -9,10 +9,10 @@ build:
 run:
 	docker run \
 		-i \
-		-v ~/media/kyle/1tb/linuxdata/imx8development/junkdock/imxpoky:/root/poky \
---name imx8-yocto-build-test \
+		-v ~/media/kyle/1tb/linuxdata/imx8development/junkdock/imxpoky:/root/nxp/ \
+--name imx_install_poky_test \
 		$(REPO):$(TAG)
 
 shell:
-	docker exec -it imx8-yocto-build-test bash
+	docker exec -it imx_install_poky_test bash
 

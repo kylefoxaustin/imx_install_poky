@@ -103,20 +103,6 @@ if [ "$USER" != "root" ]; then
 fi
 debug && sleep 2
 
-DEBUGON=1
-
-######################################
-# clean up supervisord.conf        ##
-# -this is for docker container    ##
-####################################
-
-debug && echo "about to remove \%USER\%:\%USER\% from supervisord.con"
-sed -i "s|%USER%|$USER|" /etc/supervisor/conf.d/supervisord.conf
-
-debug && echo "about to remove \%HOME\%:\%HOME\% from supervisord.conf"
-sed -i "s|%HOME%|$HOME|" /etc/supervisor/conf.d/supervisord.conf
-
-
 # check if 1st time run or not
 # if already run, then we don't need to change permissions and don't want to
 # this keeps chown from changing owernship of potentially thousands of files
