@@ -45,7 +45,7 @@ docker run -i -v /mypath/mydir:/root/poky <imx_install_poky>
 # How to build
 simple clone the project to your local host and run the following:
 
-akefile based.  Here are some simple build options you can use:
+Makefile based.  Here are some simple build options you can use:
 
 $ make build <- builds the container
 
