@@ -41,3 +41,19 @@ to run non-interactive mode, use the docker run command listed above in interact
 so:
 
 docker run -i -v /mypath/mydir:/root/poky <imx_install_poky>
+
+# How to build
+simple clone the project to your local host and run the following:
+
+Makefile based:
+
+$ make build <- builds the container
+$ make run <- runs a test container with default options
+$ make build run <- builds the container and runs it in a test mode
+
+"cleanrun" based
+I created this script to do a complete build after docker RM and docker image RM everything on your host.
+This made my life a bit easier with dependencies.
+WARNING:  running ./cleanrun WILL automatically stop all containers, rm all containers and delete all docker images on your host!!!!   
+
+
