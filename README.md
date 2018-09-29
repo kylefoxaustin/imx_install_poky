@@ -70,11 +70,13 @@ for example
 this will grab the latest version of Poky
 
 if you only specify the version, the container will default to a source of git://gityoctorpoject.org/poky
+
 for example:
 
     docker run -i <imx_install_poky> --version sumo
     
 this will pull the sumo version from git://gityoctoproject.org/poky
+
 This option is useful if you want to move back and forth between versions of poky.
 
 # How to build
