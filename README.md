@@ -18,7 +18,8 @@ it will give you the option of running oe-init-build-env with just defaults as w
 # How to run in interactive mode
 In this example i have included a host volume in the command string.  You can omit the volume if you do not want it
 
-docker run -i -v /mypath/mydir:/root/poky <imx_install_poky> interactive
+    docker run -i -v /mypath/mydir:/root/poky <imx_install_poky> --interactive
+note: the interactive command line argument can either be -i or --interactive
 
 The continer will execute and the menu system will appear in your terminal.
 select option 1, hit enter and the process will begin.
@@ -30,20 +31,54 @@ rm'ing the container.
 
 # Non-interactive mode
 This mode will run straight through installing the Yocto Poky SDK. 
-At this time, i have not added the ability to select your desired SDK via command line.  This is
-a feature i'm working on.   But Poky is the latet published by Yocto project.  You can always modify startup.sh
-with whatever you desire to download
+
+Non-interactive mode allows command line arguments to choose a specific Yocto Project SDK to download or you can accept the defaults within the container (which are at this time the sumo version of Poky)
 
 # how to run in non-interactive mode
 Non-interactive mode instructs the container to download the yocto Poky sdk to /root/nxp/poky inside the container.
 
-to run non-interactive mode, use the docker run command listed above in interactive mode but omit the argument "interactive"
-so:
+the full command line arguments include the git source and the version you want.   both are optional.
+if no command line arguments are included then the container defaults will be used.
 
-docker run -i -v /mypath/mydir:/root/poky <imx_install_poky>
+arguments:
+docker run -i <imx_install_poky> -v <version> -s <git source>
+  option:  
+  version can be written as -v or --version
+  source can be written as -s our --source
+
+# to run non-interactive mode with container defaults:
+
+    docker run -i -v /mypath/mydir:/root/poky <imx_install_poky>
+
+this will pull Poky from : git://git.yoctoproject.org/poky
+
+# to run non-interactive mode with your command line argument choices:
+
+specify the source where source = git://git.yoctoproject.org/poky
+
+    docker run -i <imx_install_poky> --source git://gityoctoproject.org/poky
+
+specify the version and source where version = sumo and source = git://gityoctoproject.org/poky
+
+    docker run -i <imx_install_poky> --version sumo --source git://gityoctoproject.org/poky
+
+You have the option to only specify source.  if version is left out, the container will ignore the field
+for example
+
+    docker run -i <imx_install_poky> --source git://gityoctoproject.org/poky
+    
+this will grab the latest version of Poky
+
+if you only specify the version, the container will default to a source of git://gityoctorpoject.org/poky
+for example:
+
+    docker run -i <imx_install_poky> --version sumo
+    
+this will pull the sumo version from git://gityoctoproject.org/poky
+This option is useful if you want to move back and forth between versions of poky.
 
 # How to build
-simple clone the project to your local host and run the following:
+simply clone the project to your local host and run the following:
 
 Makefile based.  Here are some simple build options you can use:
 
