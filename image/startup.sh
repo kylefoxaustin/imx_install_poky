@@ -38,19 +38,6 @@ debug () {
 debug && echo "Beginning of startup.sh script"
 
 
-###############################
-#       process arguments    #
-#############################
-
-INTERACTIVE=1
-if [ "$1" != "interactive" ]; then
-    debug && echo "non-interactive mode"
-    INTERACTIVE=1 # user does NOT want interactive mode
-else
-    INTERACTIVE=0 # user wants interactive mode
-fi
-
-
 
 ###############################
 #       globals              #
@@ -58,11 +45,39 @@ fi
 
 # set DEBUGON initial value to OFF =1
 DEBUGON=1
-
+INTERACTIVE=1
 BINDIRECTORY="/usr/local/bin"
 REPOFILE="/usr/local/bin/repo"
 TERM=xterm	 
 POKYDIR="${HOME}/nxp/poky"
+YPPULL="git://git.yoctoproject.org/poky"
+YPVER=""
+
+###############################
+#       process arguments    #
+#############################
+
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -i | --interactive )    shift
+                                INTERACTIVE=0
+                                ;;
+	-v | --version )
+	                        YPVER=$2
+				shift
+				shift
+				;;
+	-s | --source )         YPPULL=$2
+			       	shift
+				shift
+				;;
+
+        * )                     echo "Command line Arguments are invalid, your output will likely be incorrect or corrupt"
+				echo "Suggest exiting the container and restarting" 
+                                exit 1
+    esac
+done
 
 
 ######################################
@@ -71,7 +86,6 @@ POKYDIR="${HOME}/nxp/poky"
 # via docker run -e USER         ##
 ##################################
 
-DEBUGON=1
 debug && echo "This is the HOME directory before setting HOME to root $HOME"
 debug && echo "this is the path of current directory:"
 debug && pwd
@@ -222,7 +236,13 @@ poky_install() {
 	    mkdir -p $POKYDIR
 	    echo $PWD
 	    echo "beginning clone...:"
-	    git clone --progress git://git.yoctoproject.org/poky $POKYDIR
+	    if [ "$YPVER" != "" ]; then
+		echo "this is the command that will be run:  git clone --progress -b $YPVER $YPPULL $POKYDIR"
+		git clone --progress -b $YPVER $YPPULL $POKYDIR
+	    else
+		echo "this is the command that will be run:  git clone --progress $YPPULL $POKYDIR"
+		git clone --progress $YPPULL $POKYDIR
+	    fi	    
 	    echo $PWD
 	    cd $POKYDIR
 	    echo $PWD
@@ -239,7 +259,14 @@ poky_install() {
 	    echo "$POKYDIR exists but directory does not contain anything"
 	    echo "proceeding with installation into $POKYDIR"
 	    echo "beginning clone...:"
-	    git clone --progress git://git.yoctoproject.org/poky $POKYDIR
+	    if [ "$YPVER" != "" ]; then
+		echo "this is the command that will be run:  git clone --progress -b $YPVER $YPPULL $POKYDIR"
+		git clone --progress -b $YPVER $YPPULL $POKYDIR
+	    else
+		echo "this is the command that will be run:  git clone --progress $YPPULL $POKYDIR"
+		git clone --progress $YPPULL $POKYDIR
+	    fi
+
 	    echo $PWD
 	    cd $POKYDIR
 	    echo $PWD
@@ -263,10 +290,29 @@ poky_install() {
 		  echo "POKYDIR is = $POKYDIR"
 		  if [ ! -d "$POKYDIR" ]; then
 		      echo "Yocto Poky check... POKYDIR doesn't exist so creating Poky and cloning"
-		      mkdir -p $POKYDIR
+	      	      mkdir -p $POKYDIR
 		      echo $PWD
+		      echo "enter git directory (press ENTER to accept default of $YPPULL )"
+		      read PULLME
+		      if [ "$PULLME" != "" ]; then
+			  YPPULL=$PULLME
+		      fi
+
+		      echo "enter version (press ENTER to accept default of $YPVER )"
+		      read VERME
+		      if [ "$VERME" != "" ]; then
+			  YPVER=$VERME
+		      fi
+		      
 		      echo "beginning clone...:"
-		      git clone --progress git://git.yoctoproject.org/poky $POKYDIR
+		      if [ "$YPVER" != "" ]; then
+			  echo "this is the command that will be run:  git clone --progress -b $YPVER $YPPULL $POKYDIR"
+			  git clone --progress -b $YPVER $YPPULL $POKYDIR
+		      else
+			  echo "this is the command that will be run:  git clone --progress $YPPULL $POKYDIR"
+			  git clone --progress $YPPULL $POKYDIR
+		      fi
+		      
 		      echo $PWD
 		      cd $POKYDIR
 		      echo $PWD
@@ -286,8 +332,26 @@ poky_install() {
 		  else
 		      echo "$POKYDIR exists but directory does not contain anything"
 		      echo "proceeding with installation into $POKYDIR"
-		      echo "beginning clone...:"
-		      git clone --progress git://git.yoctoproject.org/poky $POKYDIR
+		      echo "enter git directory (press ENTER to accept default of $YPPULL )"
+		      read PULLME
+		      if [ "$PULLME" != "" ]; then
+			  YPPULL=$PULLME
+		      fi
+
+		      echo "enter version (press ENTER to accept default of $YPVER )"
+		      read VERME
+		      if [ "$VERME" != "" ]; then
+			  YPVER=$VERME
+		      fi
+		      
+		      if [ "$YPVER" != "" ]; then
+			  echo "this is the command that will be run:  git clone --progress -b $YPVER $YPPULL $POKYDIR"
+			  git clone --progress -b $YPVER $YPPULL $POKYDIR
+		      else
+			  echo "this is the command that will be run:  git clone --progress $YPPULL $POKYDIR"
+			  git clone --progress $YPPULL $POKYDIR
+		      fi
+
 		      echo $PWD
 		      cd $POKYDIR
 		      echo $PWD
